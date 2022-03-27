@@ -17,6 +17,12 @@ fig, ([ax1, ax2],[ax3, ax4]) = plt.subplots(2,2, figsize=(16,6))
 #Loads the dataset
 X = pd.read_csv('Data-Cluster.csv')
 X.head()
+X1 = pd.read_csv('Data-Cluster.csv')
+X1.head()
+X2 = pd.read_csv('Data-Cluster.csv')
+X2.head()
+X3 = pd.read_csv('Data-Cluster.csv')
+X3.head()
 
 #Runs an elbow to decide the correct amount of clusters
 distortions = []
@@ -34,24 +40,43 @@ ax1.set_title('The Elbow Method showing the optimal k')
 
 
 #Assigns collumns
-X = X.filter(["fnlwgt", "age" ], axis = 1)
+X = X.filter(["fnlwgt", "amount" ], axis = 1)
 
-model = KMeans(n_clusters= 5)
+model = KMeans(n_clusters= 4)
 model.fit(X)
 
+
 #plot the cluster
-sns.scatterplot(data = X, x="fnlwgt", y= "age", c= model.labels_, cmap= 'rainbow', ax=ax2)
+sns.scatterplot(data = X, x="fnlwgt", y="amount", c= model.labels_, cmap= 'rainbow', ax=ax2)
 #Plots cluster mid points
 sns.scatterplot(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1], c=['black'], ax=ax2)
+ax2.set_xlim(0, 999999)
+ax2.set_ylim(-0.1, 1.1)
+
+#Assigns collumns
+X1 = X1.filter(["workclass", "hours-per-week" ], axis = 1)
+
+model = KMeans(n_clusters= 4)
+model.fit(X1)
 
 #plot the cluster
-sns.scatterplot(data = X, x="fnlwgt", y= "age", c= model.labels_, cmap= 'rainbow', ax=ax3)
+sns.scatterplot(data = X1, x="workclass", y= "hours-per-week", c= model.labels_, cmap= 'rainbow', ax=ax3)
 #Plots cluster mid points
 sns.scatterplot(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1], c=['black'], ax=ax3)
+ax3.set_xlim(-1, 8)
+ax3.set_ylim(0, 100)
+
+#Assigns collumns
+X2= X2.filter(["workclass", "fnlwgt" ], axis = 1)
+
+model = KMeans(n_clusters= 4)
+model.fit(X2)
 
 #plot the cluster
-sns.scatterplot(data = X, x="fnlwgt", y= "age", c= model.labels_, cmap= 'rainbow', ax=ax4)
+sns.scatterplot(data = X2, x="workclass", y= "fnlwgt", c= model.labels_, cmap= 'rainbow', ax=ax4)
 #Plots cluster mid points
 sns.scatterplot(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1], c=['black'], ax=ax4)
+ax4.set_xlim(-1, 8)
+ax4.set_ylim(0, 999999)
 
 plt.show()
