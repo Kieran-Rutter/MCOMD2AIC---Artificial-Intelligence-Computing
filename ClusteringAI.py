@@ -1,41 +1,43 @@
+#imports libary
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
+from matplotlib import pyplot as plt
+
 import numpy as np
 import pandas as pd
-import statsmodels.api as sm
-import matplotlib.pyplot as plot
+
 import seaborn as sns
-sns.set()
-from sklearn.cluster import KMeans
 
-data = pd.read_csv('Data-Cluster.csv')
+#sets the style of the grid
+sns.set_style("darkgrid")
 
-plot.scatter(data['capital-gain'], data['age'])
-plot.xlim(0, 150000)
-plot.ylim(0, 100)
+#Loads the dataset
+X = pd.read_csv('Data-Cluster.csv')
+X.head()
 
-x = data.iloc[:,1:3] # 1t for rows and second for columns (Slices)
+#Runs an elbow to decide the correct amount of clusters
+distortions = []
+K = range(1,10)
+for k in K:
+    kmeanModel = KMeans(n_clusters=k)
+    kmeanModel.fit(X)
+    distortions.append(kmeanModel.inertia_)
 
-kmeans = KMeans(30)
-kmeans.fit(x)
+plt.figure(figsize=(16,8))
+plt.plot(K, distortions, 'bx-')
+plt.xlabel('k')
+plt.ylabel('Distortion')
+plt.title('The Elbow Method showing the optimal k')
+plt.show()
 
-identified_clusters = kmeans.fit_predict(x)
+#Assigns collumns
+X = X.filter(["fnlwgt", "age" ], axis = 1)
 
-data_with_clusters = data.copy()
-data_with_clusters['Clusters'] = identified_clusters
-plot.scatter(data_with_clusters['capital-gain'],data_with_clusters['age'],c=data_with_clusters['Clusters'],cmap='rainbow')
+model = KMeans(n_clusters= 5)
+model.fit(X)
 
-plot.show()
-
-#wcss=[]
-#for i in range(1,15):
-#    kmeans = KMeans(i)
-#    kmeans.fit(x)
-#    wcssiter = kmeans.inertia
-#    wcss.append(wcss_iter)
-
-#number_clusters = range(1,15)
-#plot.plot(number_clusters,wcss)
-#plot.title("The Elbow")
-#plot.xlabel('Number of clusters')
-#plot.ylabel('WCSS')
-
-#plot.show()
+#plot the cluster
+sns.scatterplot(data = X, x="fnlwgt", y= "age", c= model.labels_, cmap= 'rainbow' )
+#Plots cluster mid points
+sns.scatterplot(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1], c=['black'])
+plt.show()
