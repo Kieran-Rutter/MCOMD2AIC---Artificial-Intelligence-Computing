@@ -54,29 +54,29 @@ ax2.set_xlim(0, 999999)
 ax2.set_ylim(-0.1, 1.1)
 
 #Assigns collumns
-X1 = X1.filter(["workclass", "hours-per-week" ], axis = 1)
+X1 = X1.filter(["hours-per-week", "amount" ], axis = 1)
 
 model = KMeans(n_clusters= 4)
 model.fit(X1)
 
 #plot the cluster
-sns.scatterplot(data = X1, x="workclass", y= "hours-per-week", c= model.labels_, cmap= 'rainbow', ax=ax3)
+sns.scatterplot(data = X1, x="hours-per-week", y= "amount", c= model.labels_, cmap= 'rainbow', ax=ax3)
 #Plots cluster mid points
 sns.scatterplot(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1], c=['black'], ax=ax3)
-ax3.set_xlim(-1, 8)
-ax3.set_ylim(0, 100)
+ax3.set_xlim(-1, 100)
+ax3.set_ylim(-0.1, 1.1)
 
 #Assigns collumns
-X2= X2.filter(["workclass", "fnlwgt" ], axis = 1)
+X2= X2.filter(["workclass", "amount" ], axis = 1)
 
 model = KMeans(n_clusters= 4)
 model.fit(X2)
 
 #plot the cluster
-sns.scatterplot(data = X2, x="workclass", y= "fnlwgt", c= model.labels_, cmap= 'rainbow', ax=ax4)
+sns.scatterplot(data = X2, x="workclass", y= "amount", c= model.labels_, cmap= 'rainbow', ax=ax4)
 #Plots cluster mid points
 sns.scatterplot(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1], c=['black'], ax=ax4)
 ax4.set_xlim(-1, 8)
-ax4.set_ylim(0, 999999)
+ax4.set_ylim(-0.1, 1.1)
 
 plt.show()
